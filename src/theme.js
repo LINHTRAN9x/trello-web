@@ -12,14 +12,59 @@ const theme = extendTheme({
   colorSchemes: {
     light: {
       palette: {
-        primary: teal,
-        secondary: deepOrange
+        primary: {
+          main: '#C84B31'
+        },
+        secondary: { 
+          main: '#FFA732'
+        }
       }
     },
     dark: {
       palette: {
-        primary: cyan,
-        secondary: orange
+        primary: {
+          main: '#99627A'
+        },
+        secondary: {
+          main: '#EEF5FF'
+        }
+      }
+    }
+  },
+  // ..orther properties
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none'
+        }
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem'
+        })
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem',
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.light
+          },
+          '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: theme.palette.primary.main
+            }
+          },
+          '& fieldset': {
+            borderWidth: '1px !important'
+          }
+        })
       }
     }
   }
