@@ -1,0 +1,7 @@
+{
+    "compilerOptions": {
+      "paths": {
+        "~/*": ["./src/*"],
+      },
+    }
+} //xu ly duong dan khi ctrl + click
