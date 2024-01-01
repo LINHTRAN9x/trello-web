@@ -55,7 +55,7 @@ function AppBar() {
           onClick={handleOpenNavMenu}
           color="inherit"
         >
-          <AppsIcon sx={{ color: 'white' }}/>
+          {anchorElNav? <CloseIcon sx={{ color: 'white' }} /> : <AppsIcon sx={{ color: 'white' }}/>}
         </IconButton>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           <SvgIcon component={TrelloIcon} inheritViewBox fontSize= "small" sx={{ color: 'white' }} />
