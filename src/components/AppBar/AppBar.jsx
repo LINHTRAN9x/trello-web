@@ -54,6 +54,7 @@ function AppBar() {
           aria-haspopup="true"
           onClick={handleOpenNavMenu}
           color="inherit"
+          sx={{ display: { md: 'none' } }}
         >
           {anchorElNav? <CloseIcon sx={{ color: 'white' }} /> : <AppsIcon sx={{ color: 'white' }}/>}
         </IconButton>
