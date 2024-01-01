@@ -2,7 +2,7 @@ import AttachmentIcon from '@mui/icons-material/Attachment'
 import CommentIcon from '@mui/icons-material/Comment'
 import GroupIcon from '@mui/icons-material/Group'
 import { Button } from '@mui/material'
-import { Card as MuiCard } from '@mui/material' /////
+import { Card as MuiCard } from '@mui/material' /////Tránh trùng tên với funcion.
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
