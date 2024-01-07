@@ -20,7 +20,8 @@ function Card({ card }) {
     // touchAction: 'none', //dành cho sensor default dạng PoiterSensor
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : undefined
+    opacity: isDragging ? 0.5 : undefined,
+    border: isDragging ? '1px solid #333' : undefined
   }
 
   const shouldShowCardActions = () => {
