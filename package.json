@@ -2,6 +2,7 @@
   "name": "vite-trello-web-base-project",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://LINHTRAN9x.github.io/trello-web",
   "type": "module",
   "author": "LinhTranDev",
   "description": "Trello clone",
@@ -16,7 +17,6 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://github.com/LINHTRAN9x/trello-web",
   "dependencies": {
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
