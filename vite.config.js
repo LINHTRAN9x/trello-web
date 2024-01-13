@@ -14,4 +14,5 @@ export default defineConfig({
       { find: '~', replacement: '/src' } //thay the ralative path thanh xu ly ~/ (absolute) cho no gon gang.
     ]
   },
+  base: '/trello-web/'
 })
