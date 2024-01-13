@@ -3,8 +3,9 @@ import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
 
 import { DndContext, MouseSensor, TouchSensor, useSensor,
-  useSensors, DragOverlay, defaultDropAnimationSideEffects, closestCorners } from '@dnd-kit/core'
-import { useEffect, useState } from 'react'
+  useSensors, DragOverlay, defaultDropAnimationSideEffects,
+  closestCorners, pointerWithin, rectIntersection, getFirstCollision, closestCenter } from '@dnd-kit/core'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -29,6 +30,9 @@ function BoardContent({ board }) {
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null)
+
+  //Diem va cham cuoi cung (xu ly thuat toan phat hien va cham)
+  const lastOverId = useRef(null)
 
   useEffect(() => {
     const orderedColumns = mapOrder(board?.columns, board?.columnOrderIds, '_id' ) //xay xep columns theo _id;
@@ -235,6 +239,36 @@ function BoardContent({ board }) {
     })
   }
 
+  const collisionDetectionStrategy = useCallback(( args ) => {
+    if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+      return closestCorners({ ...args })
+    }
+
+    const pointerIntersections = pointerWithin(args)
+    //thuat toan phat hien va cham se tra ve mot array cac va cham o day.
+    const intersections = !!pointerIntersections?.length
+      ? pointerIntersections
+      : rectIntersection(args)
+      //tim overId dau tien trong intersections o tren.
+    let overId = getFirstCollision(intersections, 'id')
+    // console.log('overId: ',overId)
+    if (overId) {
+      const checkColumn = orderedColumns.find(column => column._id === overId)
+      if (checkColumn) {
+        overId = closestCenter({
+          ...args,
+          droppableContainers: args.droppableContainers.filter(container => {
+            return (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))
+          })
+        })[0]?.id
+      }
+      lastOverId.current = overId
+      return [{ id: overId }]
+    }
+    //neu overId la null thi tra ve array rong - tranh crash trang.
+    return lastOverId.current ? [{ id: lastOverId.current }] : []
+  }, [activeDragItemType, orderedColumns])
+
   // console.log('activeDragItemId: ', activeDragItemId)
   // console.log('activeDragItemType: ', activeDragItemType)
   // console.log('activeDragItemData: ', activeDragItemData)
@@ -242,7 +276,10 @@ function BoardContent({ board }) {
     <DndContext
       sensors={sensors}
       //closestCorners: thuật toán phát hiện va chạm-docs dnd kit,fix conflict card co img.
-      collisionDetection={closestCorners}
+      // collisionDetection={closestCorners}
+
+      //custom nâng cao thuật toán va chạm(fix bug flickering).
+      collisionDetection={collisionDetectionStrategy}
       onDragStart={handleDragStart}
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd} >
