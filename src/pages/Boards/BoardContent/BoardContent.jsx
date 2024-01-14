@@ -239,23 +239,28 @@ function BoardContent({ board }) {
     })
   }
 
+  //chiến lược phát hiện thuật toán va chạm.
   const collisionDetectionStrategy = useCallback(( args ) => {
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
       return closestCorners({ ...args })
     }
 
+    //tìm các điểm giao nhau,va chạm-Intersections với con trỏ,tra ve mot array cac va cham o day.
     const pointerIntersections = pointerWithin(args)
-    //thuat toan phat hien va cham se tra ve mot array cac va cham o day.
-    const intersections = !!pointerIntersections?.length
-      ? pointerIntersections
-      : rectIntersection(args)
-      //tim overId dau tien trong intersections o tren.
-    let overId = getFirstCollision(intersections, 'id')
+    if (!pointerIntersections?.length) return
+
+    // //thuat toan phat hien va cham se tra ve mot array cac va cham o day.
+    // const intersections = !!pointerIntersections?.length
+    //   ? pointerIntersections
+    //   : rectIntersection(args)
+
+    //tim overId dau tien trong pointerIntersections o tren.
+    let overId = getFirstCollision(pointerIntersections, 'id')
     // console.log('overId: ',overId)
     if (overId) {
       const checkColumn = orderedColumns.find(column => column._id === overId)
       if (checkColumn) {
-        overId = closestCenter({
+        overId = closestCorners({
           ...args,
           droppableContainers: args.droppableContainers.filter(container => {
             return (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))
